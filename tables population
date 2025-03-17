@@ -1,0 +1,39 @@
+-- Insert Suppliers
+INSERT INTO suppliers (supplier_name, contact_name, country, lead_time_days) VALUES
+('Asia Imports Ltd.', 'Li Wei', 'China', 15),
+('EuroGoods Co.', 'Anna Schmidt', 'Germany', 10),
+('NorthAm Supplies', 'John Carter', 'USA', 7),
+('EcoPack Solutions', 'Maria Lopez', 'Mexico', 12);
+
+-- Insert Products
+INSERT INTO products (product_name, supplier_id, category, unit_price) VALUES
+('LED Desk Lamp', 1, 'Electronics', 25.99),
+('Stainless Steel Pan', 2, 'Kitchenware', 45.50),
+('Organic Coffee Beans', 3, 'Food & Beverage', 12.75),
+('Recycled Paper Towels', 4, 'Household', 3.99),
+('Bluetooth Speaker', 1, 'Electronics', 59.99);
+
+-- Insert Inventory
+INSERT INTO inventory (product_id, warehouse_location, stock_quantity, last_restock_date) VALUES
+(1, 'New York', 150, '2025-02-01'),
+(1, 'Los Angeles', 200, '2025-03-01'),
+(2, 'Chicago', 80, '2025-01-15'),
+(3, 'New York', 300, '2025-02-20'),
+(4, 'Los Angeles', 500, '2025-03-10'),
+(5, 'Chicago', 120, '2025-02-25');
+
+-- Insert Orders
+INSERT INTO orders (order_date, customer_name, shipping_address, total_amount, order_status) VALUES
+('2024-12-15', 'Alice Brown', '123 Maple St, NY', 135.47, 'Shipped'),
+('2025-01-10', 'Bob Johnson', '456 Oak Ave, LA', 77.98, 'Delivered'),
+('2025-03-01', 'Clara Lee', '789 Pine Rd, Chicago', 51.73, 'Pending'),
+('2025-03-15', 'David Kim', '321 Elm St, NY', 0.00, 'Cancelled');
+
+-- Insert Order Details
+INSERT INTO order_details (order_id, product_id, quantity, unit_price_at_sale) VALUES
+(1, 1, 3, 25.99),  -- LED Desk Lamp
+(1, 3, 4, 12.75),  -- Organic Coffee Beans
+(2, 5, 1, 59.99),  -- Bluetooth Speaker
+(2, 4, 2, 3.99),   -- Recycled Paper Towels
+(3, 2, 1, 45.50),  -- Stainless Steel Pan
+(3, 4, 2, 3.99);   -- Recycled Paper Towels
