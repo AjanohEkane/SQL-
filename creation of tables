@@ -1,0 +1,48 @@
+-- Suppliers table
+CREATE TABLE suppliers (
+    supplier_id SERIAL PRIMARY KEY,
+    supplier_name VARCHAR(100) NOT NULL UNIQUE,
+    contact_name VARCHAR(50),
+    country VARCHAR(50),
+    lead_time_days INT CHECK (lead_time_days >= 0)
+);
+
+-- Products table
+CREATE TABLE products (
+    product_id SERIAL PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    supplier_id INT REFERENCES suppliers(supplier_id) ON DELETE SET NULL,
+    category VARCHAR(50),
+    unit_price DECIMAL(10,2) CHECK (unit_price >= 0),
+    UNIQUE (product_name, supplier_id)
+);
+
+-- Inventory table
+CREATE TABLE inventory (
+    inventory_id SERIAL PRIMARY KEY,
+    product_id INT REFERENCES products(product_id) ON DELETE CASCADE,
+    warehouse_location VARCHAR(50),
+    stock_quantity INT NOT NULL CHECK (stock_quantity >= 0),
+    last_restock_date DATE,
+    UNIQUE (product_id, warehouse_location)
+);
+
+-- Orders table
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    order_date DATE DEFAULT CURRENT_DATE,
+    customer_name VARCHAR(100),
+    shipping_address VARCHAR(150),
+    total_amount DECIMAL(12,2) CHECK (total_amount >= 0),
+    order_status VARCHAR(20) CHECK (order_status IN ('Pending', 'Shipped', 'Delivered', 'Cancelled'))
+);
+
+-- Order Details table (many-to-many relationship between orders and products)
+CREATE TABLE order_details (
+    detail_id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES orders(order_id) ON DELETE CASCADE,
+    product_id INT REFERENCES products(product_id) ON DELETE SET NULL,
+    quantity INT NOT NULL CHECK (quantity > 0),
+    unit_price_at_sale DECIMAL(10,2) CHECK (unit_price_at_sale >= 0),
+    UNIQUE (order_id, product_id)
+);
