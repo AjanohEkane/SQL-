@@ -1,0 +1,79 @@
+-- basic query
+SELECT * FROM suppliers;
+
+--Simple query
+SELECT product_name, unit_price FROM products WHERE category = 'Electronics';
+
+
+-- Aggregations 
+SELECT warehouse_location, SUM(stock_quantity) AS total_stock
+FROM inventory
+GROUP BY warehouse_location;
+
+--subquery
+SELECT product_name
+FROM products
+WHERE product_id IN (
+    SELECT product_id
+    FROM inventory
+    WHERE stock_quantity < 100
+);
+
+--Creating a view 
+CREATE VIEW inventory_summary AS
+SELECT p.product_name, p.category, s.supplier_name,
+       SUM(i.stock_quantity) AS total_stock
+FROM products p
+JOIN suppliers s ON p.supplier_id = s.supplier_id
+JOIN inventory i ON p.product_id = i.product_id
+GROUP BY p.product_name, p.category, s.supplier_name;
+
+--creating a case syntax
+SELECT 
+    product_name,
+    unit_price,
+    CASE 
+        WHEN unit_price < 10 THEN 'Low Cost'
+        WHEN unit_price BETWEEN 10 AND 50 THEN 'Mid Range'
+        WHEN unit_price > 50 THEN 'Premium'
+        ELSE 'Unknown'
+    END AS price_category
+FROM products
+ORDER BY unit_price;
+
+--Joins 
+--inner join
+SELECT 
+    p.product_name,
+    s.supplier_name,
+    od.quantity
+FROM products p
+INNER JOIN suppliers s ON p.supplier_id = s.supplier_id
+INNER JOIN order_details od ON p.product_id = od.product_id;
+
+--left join 
+
+SELECT 
+    p.product_name,
+    i.warehouse_location,
+    i.stock_quantity
+FROM products p
+LEFT JOIN inventory i ON p.product_id = i.product_id;
+
+--right join 
+
+SELECT 
+    p.product_name,
+    i.warehouse_location,
+    i.stock_quantity
+FROM products p
+RIGHT JOIN inventory i ON p.product_id = i.product_id;
+
+-full outer join 
+
+SELECT 
+    p.product_name,
+    i.warehouse_location,
+    i.stock_quantity
+FROM products p
+FULL JOIN inventory i ON p.product_id = i.product_id;
